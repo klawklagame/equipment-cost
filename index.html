@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="คำนวณค่าอัปเกรดอุปกรณ์ผู้กล้าใน Clash of Clans แร่วิบวับ แร่เรืองรอง แร่ประกายดาว พร้อมค่าเพชร" />
+    <meta name="description" content="คำนวณค่าอัปเกรดอุปกรณ์ผู้กล้าใน Clash of Clans แร่วิบวับ แร่เรืองรอง แร่ประกายดาว พร้อมค่า 💎" />
     <meta name="theme-color" content="#0a0a0a">
     <meta name="color-scheme" content="dark">
-    <title>Equipment Upgrade Cost · KLAWKLA</title>
+    <title>ค่าอัปเกรดอุปกรณ์ผู้กล้า • KLAWKLA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://klawkla.com" crossorigin>
@@ -35,7 +35,7 @@
                 </h1>
 
                 <p class="hero-sub">
-                    คำนวณแร่ที่ต้องใช้อัปเกรดอุปกรณ์ ทั้งคอมมอนและอีปิค พร้อมราคาเทียบเพชร
+                    คำนวณแร่ที่ต้องใช้อัปเกรดอุปกรณ์ ทั้งคอมมอนและอีปิค พร้อมราคาเทียบ 💎
                 </p>
             </div>
         </header>
@@ -48,36 +48,36 @@
 
                     <div class="ore-list">
                         <div class="ore-item ore-item--shiny">
-                            <span class="ore-icon" aria-hidden="true">
-                                <svg viewBox="0 0 40 40" width="22" height="22"><path d="M20 4 L24 16 L36 20 L24 24 L20 36 L16 24 L4 20 L16 16 Z"/></svg>
+                            <span class="ore-icon">
+                                <img src="https://klawkla.com/content/images/2026/06/shiny-ore.webp" alt="แร่วิบวับ" width="32" height="32" loading="lazy" decoding="async">
                             </span>
                             <div class="ore-meta">
                                 <h3 class="ore-name">แร่วิบวับ</h3>
                                 <p class="ore-desc">ใช้อัปเกรดอุปกรณ์คอมมอนและอีปิคทุกเลเวล</p>
                             </div>
-                            <span class="ore-price">1 เพชร</span>
+                            <span class="ore-price">1 💎</span>
                         </div>
 
                         <div class="ore-item ore-item--glowy">
-                            <span class="ore-icon" aria-hidden="true">
-                                <svg viewBox="0 0 40 40" width="22" height="22"><path d="M20 4 L24 16 L36 20 L24 24 L20 36 L16 24 L4 20 L16 16 Z"/></svg>
+                            <span class="ore-icon">
+                                <img src="https://klawkla.com/content/images/2026/06/glowy-ore.webp" alt="แร่เรืองรอง" width="32" height="32" loading="lazy" decoding="async">
                             </span>
                             <div class="ore-meta">
                                 <h3 class="ore-name">แร่เรืองรอง</h3>
                                 <p class="ore-desc">ใช้อัปเกรดเลเวล 3, 6, 9, 12, 15, 18, 21, 24, 27</p>
                             </div>
-                            <span class="ore-price">5 เพชร</span>
+                            <span class="ore-price">5 💎</span>
                         </div>
 
                         <div class="ore-item ore-item--starry">
-                            <span class="ore-icon" aria-hidden="true">
-                                <svg viewBox="0 0 40 40" width="22" height="22"><path d="M20 4 L24 16 L36 20 L24 24 L20 36 L16 24 L4 20 L16 16 Z"/></svg>
+                            <span class="ore-icon">
+                                <img src="https://klawkla.com/content/images/2026/06/starry-ore.webp" alt="แร่ประกายดาว" width="32" height="32" loading="lazy" decoding="async">
                             </span>
                             <div class="ore-meta">
                                 <h3 class="ore-name">แร่ประกายดาว</h3>
                                 <p class="ore-desc">ใช้อัปเกรดอุปกรณ์อีปิคเลเวล 9, 12, 15, 18, 21, 24, 27</p>
                             </div>
-                            <span class="ore-price">35 เพชร</span>
+                            <span class="ore-price">35 💎</span>
                         </div>
                     </div>
                 </article>
@@ -104,12 +104,12 @@
                     <div class="calc-inputs">
                         <label class="calc-field">
                             <span class="calc-label">เลเวลปัจจุบัน</span>
-                            <input id="fromLv" type="number" min="1" value="1" inputmode="numeric" />
+                            <input id="fromLv" type="number" min="1" max="18" value="1" inputmode="numeric" />
                         </label>
                         <span class="calc-arrow" aria-hidden="true">→</span>
                         <label class="calc-field">
                             <span class="calc-label">อัปเกรดถึงเลเวล</span>
-                            <input id="toLv" type="number" min="2" value="18" inputmode="numeric" />
+                            <input id="toLv" type="number" min="2" max="18" value="18" inputmode="numeric" />
                         </label>
                     </div>
 
@@ -123,9 +123,7 @@
                 <article class="card">
                     <span class="eyebrow">ตารางค่าอัปเกรด</span>
                     <h2 class="h-title">อัตราการใช้แร่แต่ละเลเวล</h2>
-                    <div class="table-wrap">
-                        <table class="rate-table" id="rateTable"></table>
-                    </div>
+                    <div class="rate-tables" id="rateTables"></div>
                 </article>
             </div>
         </section>

@@ -55,6 +55,13 @@ const EPIC = [
 ];
 
 const GEM_PRICE = { shiny: 1, glowy: 5, starry: 35 };
+const ORE_ICONS = {
+    shiny: 'https://klawkla.com/content/images/2026/06/shiny-ore.webp',
+    glowy: 'https://klawkla.com/content/images/2026/06/glowy-ore.webp',
+    starry: 'https://klawkla.com/content/images/2026/06/starry-ore.webp',
+};
+const COMMON_HIGHLIGHT_LEVELS = new Set([3, 6, 9, 12, 15, 18]);
+const EPIC_HIGHLIGHT_LEVELS = new Set([9, 12, 15, 18, 21, 24, 27]);
 
 const fmt = n => n.toLocaleString('en-US');
 
@@ -66,7 +73,7 @@ const typeBtns  = document.querySelectorAll('.typebtn');
 const fromLv    = document.getElementById('fromLv');
 const toLv      = document.getElementById('toLv');
 const resultsEl = document.getElementById('results');
-const tableEl   = document.getElementById('rateTable');
+const tablesEl  = document.getElementById('rateTables');
 
 // ============ CORE ============
 function dataFor(type) { return type === 'epic' ? EPIC : COMMON; }
@@ -108,6 +115,10 @@ function compute(from, to) {
 
 function renderResults() {
     const { from, to } = clampInputs();
+    const showStarry = currentType === 'epic';
+
+    resultsEl.classList.toggle('calc-results--common', !showStarry);
+    resultsEl.classList.toggle('calc-results--epic', showStarry);
 
     if (to <= from) {
         resultsEl.innerHTML = `
@@ -118,64 +129,124 @@ function renderResults() {
     }
 
     const c = compute(from, to);
-    const showStarry = currentType === 'epic';
+    const oreLabel = (key, label) => `
+        <span class="result-label result-label--ore">
+            <img class="result-ore-icon" src="${ORE_ICONS[key]}" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
+            ${label}
+        </span>`;
 
     const starryChip = showStarry ? `
         <div class="result-chip result-chip--starry">
-            <span class="result-label">แร่ประกายดาว</span>
+            ${oreLabel('starry', 'แร่ประกายดาว')}
             <span class="result-value">${fmt(c.starry)}</span>
-            <span class="result-sub">= ${fmt(c.starry * GEM_PRICE.starry)} เพชร</span>
+            <span class="result-sub">= ${fmt(c.starry * GEM_PRICE.starry)} 💎</span>
         </div>` : '';
 
     resultsEl.innerHTML = `
         <div class="result-chip result-chip--shiny">
-            <span class="result-label">แร่วิบวับ</span>
+            ${oreLabel('shiny', 'แร่วิบวับ')}
             <span class="result-value">${fmt(c.shiny)}</span>
-            <span class="result-sub">= ${fmt(c.shiny * GEM_PRICE.shiny)} เพชร</span>
+            <span class="result-sub">= ${fmt(c.shiny * GEM_PRICE.shiny)} 💎</span>
         </div>
         <div class="result-chip result-chip--glowy">
-            <span class="result-label">แร่เรืองรอง</span>
+            ${oreLabel('glowy', 'แร่เรืองรอง')}
             <span class="result-value">${fmt(c.glowy)}</span>
-            <span class="result-sub">= ${fmt(c.glowy * GEM_PRICE.glowy)} เพชร</span>
+            <span class="result-sub">= ${fmt(c.glowy * GEM_PRICE.glowy)} 💎</span>
         </div>
         ${starryChip}
         <div class="result-chip result-chip--total">
-            <span class="result-label">จ่ายด้วยเพชร</span>
+            <span class="result-label result-label--gem">
+                <span class="result-gem-icon" aria-hidden="true">💎</span>
+                จ่ายด้วยเพชร
+            </span>
             <span class="result-value">${fmt(c.gems)}</span>
             <span class="result-sub">${from} → ${to}</span>
         </div>
     `;
 }
 
-function renderTable() {
-    const rows = dataFor(currentType);
-    const showStarry = currentType === 'epic';
+function renderRateTable({ title, meta, rows, showStarry }) {
+    const oreHead = (key, label) => `
+        <span class="rate-ore-head">
+            <img src="${ORE_ICONS[key]}" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
+            ${label}
+        </span>`;
 
-    const head = `
-        <thead>
-            <tr>
-                <th>เลเวล</th>
-                <th><span class="rate-dot rate-dot--shiny"></span>วิบวับ</th>
-                <th><span class="rate-dot rate-dot--glowy"></span>เรืองรอง</th>
-                ${showStarry ? '<th><span class="rate-dot rate-dot--starry"></span>ประกายดาว</th>' : ''}
-                <th>เพชรรวม</th>
-            </tr>
-        </thead>`;
+    const totals = rows.reduce((sum, r) => ({
+        shiny: sum.shiny + r.shiny,
+        glowy: sum.glowy + r.glowy,
+        starry: sum.starry + r.starry,
+    }), { shiny: 0, glowy: 0, starry: 0 });
+
+    const starryHead = showStarry
+        ? `<th scope="col">${oreHead('starry', 'ประกายดาว')}</th>`
+        : '';
+    const starryTotal = showStarry
+        ? `<td>${fmt(totals.starry)}</td>`
+        : '';
 
     const body = rows.map(r => {
-        const gems = r.shiny * GEM_PRICE.shiny + r.glowy * GEM_PRICE.glowy + r.starry * GEM_PRICE.starry;
+        const keyClass = !showStarry && COMMON_HIGHLIGHT_LEVELS.has(r.lv)
+            ? 'rate-row--common-key'
+            : showStarry && EPIC_HIGHLIGHT_LEVELS.has(r.lv)
+                ? 'rate-row--epic-key'
+                : '';
+
         return `
-            <tr>
-                <td>${r.lv}</td>
-                <td>${r.shiny ? fmt(r.shiny) : '—'}</td>
-                <td>${r.glowy ? fmt(r.glowy) : '—'}</td>
-                ${showStarry ? `<td>${r.starry ? fmt(r.starry) : '—'}</td>` : ''}
-                <td>${gems ? fmt(gems) : '—'}</td>
-            </tr>
-        `;
+        <tr class="${keyClass}">
+            <td>${r.lv}</td>
+            <td>${r.shiny ? fmt(r.shiny) : '—'}</td>
+            <td>${r.glowy ? fmt(r.glowy) : '—'}</td>
+            ${showStarry ? `<td>${r.starry ? fmt(r.starry) : '—'}</td>` : ''}
+        </tr>`;
     }).join('');
 
-    tableEl.innerHTML = head + '<tbody>' + body + '</tbody>';
+    return `
+        <section class="rate-table-block" aria-label="${title} ${meta}">
+            <div class="rate-table-head">
+                <h3>${title}</h3>
+                <span>${meta}</span>
+            </div>
+            <div class="table-wrap" tabindex="0" aria-label="${title} ${meta}">
+                <table class="rate-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">เลเวล</th>
+                            <th scope="col">${oreHead('shiny', 'วิบวับ')}</th>
+                            <th scope="col">${oreHead('glowy', 'เรืองรอง')}</th>
+                            ${starryHead}
+                        </tr>
+                    </thead>
+                    <tbody>${body}</tbody>
+                    <tfoot>
+                        <tr>
+                            <th scope="row">รวม</th>
+                            <td>${fmt(totals.shiny)}</td>
+                            <td>${fmt(totals.glowy)}</td>
+                            ${starryTotal}
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+    `;
+}
+
+function renderTables() {
+    tablesEl.innerHTML = [
+        renderRateTable({
+            title: 'อุปกรณ์คอมมอน',
+            meta: '18 เลเวล',
+            rows: COMMON,
+            showStarry: false,
+        }),
+        renderRateTable({
+            title: 'อุปกรณ์อีปิค',
+            meta: '27 เลเวล',
+            rows: EPIC,
+            showStarry: true,
+        }),
+    ].join('');
 }
 
 // ============ HANDLERS ============
@@ -191,9 +262,9 @@ typeBtns.forEach(btn => {
             b.setAttribute('aria-selected', active ? 'true' : 'false');
         });
 
-        // adjust bounds; if prior "to" exceeded new max, rerender will clamp.
+        fromLv.value = 1;
+        toLv.value = maxLvFor(type);
         renderResults();
-        renderTable();
     });
 });
 
@@ -201,4 +272,4 @@ typeBtns.forEach(btn => {
 
 // initial
 renderResults();
-renderTable();
+renderTables();
