@@ -5,24 +5,24 @@
 
 @font-face {
     font-family: "FC Krung Thep";
-    src: url("https://klawkla.com/content/files/2026/02/FCKrungThep-Bold.woff2") format("woff2"),
-         url("https://klawkla.com/content/files/2026/02/FCKrungThep-Bold.woff") format("woff");
+    src: url("fonts/FCKrungThep-Bold.woff2") format("woff2"),
+         url("fonts/FCKrungThep-Bold.woff") format("woff");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "FC Maha Nakhon Flat";
-    src: url("https://klawkla.com/content/files/2025/08/FCMahaNakhonFlat-Light.woff2") format("woff2"),
-         url("https://klawkla.com/content/files/2025/08/FCMahaNakhonFlat-Light.woff") format("woff");
+    src: url("fonts/FCMahaNakhonFlat-Light.woff2") format("woff2"),
+         url("fonts/FCMahaNakhonFlat-Light.woff") format("woff");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "FC Maha Nakhon Flat";
-    src: url("https://klawkla.com/content/files/2026/02/FCMahaNakhonFlat-Bold.woff2") format("woff2"),
-         url("https://klawkla.com/content/files/2026/02/FCMahaNakhonFlat-Bold.woff") format("woff");
+    src: url("fonts/FCMahaNakhonFlat-Bold.woff2") format("woff2"),
+         url("fonts/FCMahaNakhonFlat-Bold.woff") format("woff");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
