@@ -5,30 +5,26 @@
 
 @font-face {
     font-family: "FC Krung Thep";
-    src: url("https://klawkla.com/content/files/2025/08/FCKrungThep-Light.woff2") format("woff2"),
-         url("https://klawkla.com/content/files/2025/08/FCKrungThep-Light.woff") format("woff");
-    font-weight: 100 600;
-    font-display: swap;
-}
-@font-face {
-    font-family: "FC Krung Thep";
     src: url("https://klawkla.com/content/files/2026/02/FCKrungThep-Bold.woff2") format("woff2"),
          url("https://klawkla.com/content/files/2026/02/FCKrungThep-Bold.woff") format("woff");
-    font-weight: 700 900;
+    font-weight: 700;
+    font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "FC Maha Nakhon Flat";
     src: url("https://klawkla.com/content/files/2025/08/FCMahaNakhonFlat-Light.woff2") format("woff2"),
          url("https://klawkla.com/content/files/2025/08/FCMahaNakhonFlat-Light.woff") format("woff");
-    font-weight: 100 600;
+    font-weight: 400;
+    font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: "FC Maha Nakhon Flat";
     src: url("https://klawkla.com/content/files/2026/02/FCMahaNakhonFlat-Bold.woff2") format("woff2"),
          url("https://klawkla.com/content/files/2026/02/FCMahaNakhonFlat-Bold.woff") format("woff");
-    font-weight: 700 900;
+    font-weight: 700;
+    font-style: normal;
     font-display: swap;
 }
 
@@ -56,8 +52,8 @@
     --line:      rgba(255, 255, 255, 0.07);
     --line-strong: rgba(255, 255, 255, 0.14);
 
-    --font-sans: "FC Krung Thep", "Noto Sans Thai", Tahoma, Helvetica, Arial, sans-serif;
-    --font-serif: "FC Maha Nakhon Flat", "Noto Serif Thai", "Noto Sans Thai", Tahoma, Georgia, Times, serif;
+    --font-heading: "FC Krung Thep", "Noto Sans Thai", Tahoma, Helvetica, Arial, sans-serif;
+    --font-body: "FC Maha Nakhon Flat", "Noto Sans Thai", Tahoma, Helvetica, Arial, sans-serif;
 
     --space-xs: .5rem;
     --space-sm: .8rem;
@@ -80,7 +76,8 @@ body {
     min-height: 100vh;
     background: var(--bg);
     color: var(--fg);
-    font-family: var(--font-serif);
+    font-family: var(--font-body);
+    font-weight: 400;
     font-size: 1.6rem;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -109,7 +106,7 @@ img { max-width: 100%; display: block; }
 .eyebrow {
     display: inline-flex;
     align-items: center;
-    font-family: var(--font-sans);
+    font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.25rem;
     letter-spacing: 0.04em;
@@ -117,7 +114,7 @@ img { max-width: 100%; display: block; }
 }
 
 .h-title {
-    font-family: var(--font-sans);
+    font-family: var(--font-heading);
     font-weight: 700;
     font-size: clamp(2.4rem, 4.8vw, 3.2rem);
     letter-spacing: -0.01em;
@@ -156,7 +153,7 @@ img { max-width: 100%; display: block; }
     display: inline-flex;
     align-items: center;
     gap: .8rem;
-    font-family: var(--font-sans);
+    font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.4rem;
     letter-spacing: 0.06em;
@@ -167,14 +164,14 @@ img { max-width: 100%; display: block; }
     border: 1px solid var(--line-strong);
 }
 .hero-tag {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 1.15rem;
     color: var(--muted);
     letter-spacing: 0.04em;
 }
 
 .hero-title {
-    font-family: var(--font-sans);
+    font-family: var(--font-heading);
     font-weight: 700;
     font-size: clamp(3.2rem, 6.8vw, 4.8rem);
     letter-spacing: -0.02em;
@@ -186,7 +183,7 @@ img { max-width: 100%; display: block; }
     color: var(--pink);
 }
 .hero-sub {
-    font-family: var(--font-serif);
+    font-family: var(--font-body);
     font-size: clamp(1.55rem, 2.2vw, 1.8rem);
     color: var(--muted);
     max-width: 56ch;
@@ -242,7 +239,7 @@ img { max-width: 100%; display: block; }
     min-width: 0;
 }
 .ore-name {
-    font-family: var(--font-sans);
+    font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.7rem;
     margin: 0;
@@ -255,7 +252,7 @@ img { max-width: 100%; display: block; }
     line-height: 1.55;
 }
 .ore-price {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 1.2rem;
     color: var(--fg);
     font-weight: 700;
@@ -286,7 +283,7 @@ img { max-width: 100%; display: block; }
     align-items: center;
     gap: .6rem;
     padding: .8rem 1.4rem;
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 1.35rem;
     color: var(--muted);
@@ -316,14 +313,14 @@ img { max-width: 100%; display: block; }
     gap: .6rem;
 }
 .calc-label {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 1.2rem;
     color: var(--muted);
     letter-spacing: 0.02em;
 }
 .calc-field input {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 2.6rem;
     color: var(--fg);
@@ -346,7 +343,7 @@ img { max-width: 100%; display: block; }
     box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
 }
 .calc-arrow {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 2rem;
     color: var(--muted);
     padding-bottom: 1.2rem;
@@ -386,7 +383,7 @@ img { max-width: 100%; display: block; }
     border-color: var(--jade);
 }
 .result-label {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: 1.2rem;
     color: var(--muted);
@@ -413,7 +410,7 @@ img { max-width: 100%; display: block; }
 }
 
 .result-value {
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-weight: 700;
     font-size: clamp(2.4rem, 4vw, 3rem);
     letter-spacing: -0.01em;
@@ -422,7 +419,7 @@ img { max-width: 100%; display: block; }
 .result-sub {
     font-size: 1.25rem;
     color: var(--muted);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     letter-spacing: 0.02em;
 }
 
@@ -431,7 +428,7 @@ img { max-width: 100%; display: block; }
     padding: var(--space-md);
     font-size: 1.4rem;
     color: var(--muted);
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     text-align: center;
     border: 1px dashed var(--line-strong);
     border-radius: var(--r);
@@ -466,6 +463,8 @@ img { max-width: 100%; display: block; }
 }
 
 .rate-table-head h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
     margin: 0;
     color: var(--fg);
     font-size: 1.55rem;
@@ -502,7 +501,7 @@ img { max-width: 100%; display: block; }
 .rate-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: var(--font-sans);
+    font-family: var(--font-body);
     font-size: 1.4rem;
     min-width: 360px;
 }
@@ -577,7 +576,7 @@ img { max-width: 100%; display: block; }
 
 .credit {
     text-align: center;
-    font-family: var(--font-serif);
+    font-family: var(--font-body);
     color: var(--muted-2);
     font-size: 1.3rem;
     margin: var(--space-lg) 0 0;
