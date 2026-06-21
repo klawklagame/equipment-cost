@@ -79,7 +79,7 @@ const tablesEl  = document.getElementById('rateTables');
 function dataFor(type) { return type === 'epic' ? EPIC : COMMON; }
 function maxLvFor(type) { return type === 'epic' ? 27 : 18; }
 
-function clampInputs() {
+function clampInputs({ writeBack = false } = {}) {
     const max = maxLvFor(currentType);
     const min = 1;
 
@@ -93,8 +93,11 @@ function clampInputs() {
 
     fromLv.max = max;
     toLv.max   = max;
-    fromLv.value = from;
-    toLv.value   = to;
+
+    if (writeBack) {
+        fromLv.value = from;
+        toLv.value   = to;
+    }
     return { from, to };
 }
 
@@ -268,7 +271,10 @@ typeBtns.forEach(btn => {
     });
 });
 
-[fromLv, toLv].forEach(el => el.addEventListener('input', renderResults));
+[fromLv, toLv].forEach(el => {
+    el.addEventListener('input', renderResults);
+    el.addEventListener('blur', () => { clampInputs({ writeBack: true }); renderResults(); });
+});
 
 // initial
 renderResults();
