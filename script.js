@@ -272,6 +272,7 @@ typeBtns.forEach(btn => {
 });
 
 [fromLv, toLv].forEach(el => {
+    el.addEventListener('focus', () => el.select());
     el.addEventListener('input', renderResults);
     el.addEventListener('blur', () => { clampInputs({ writeBack: true }); renderResults(); });
 });
