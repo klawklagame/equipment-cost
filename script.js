@@ -67,6 +67,7 @@ const fmt = n => n.toLocaleString('en-US');
 
 // ============ STATE ============
 let currentType = 'common';
+let tapAnchor = null;
 
 // ============ DOM ============
 const typeBtns  = document.querySelectorAll('.typebtn');
@@ -128,6 +129,7 @@ function renderResults() {
             <div class="calc-warning">
                 ✦ เลเวลเป้าหมายต้องมากกว่าเลเวลปัจจุบัน
             </div>`;
+        syncTableHighlight();
         return;
     }
 
@@ -166,9 +168,87 @@ function renderResults() {
             <span class="result-sub">${from} → ${to}</span>
         </div>
     `;
+    syncTableHighlight();
 }
 
-function renderRateTable({ title, meta, rows, showStarry }) {
+function syncTableHighlight() {
+    const { from, to } = clampInputs();
+    const inRange = to > from;
+
+    tablesEl.querySelectorAll('.rate-table-block').forEach(block => {
+        const active = block.dataset.equipmentType === currentType;
+        block.classList.toggle('rate-table-block--active', active && (inRange || tapAnchor !== null));
+        block.classList.toggle('rate-table-block--muted', !active);
+
+        block.querySelectorAll('.rate-table tbody tr[data-lv]').forEach(row => {
+            const lv = parseInt(row.dataset.lv, 10);
+            const selected = active && inRange && lv > from && lv <= to;
+            const anchored = active && tapAnchor !== null && lv === tapAnchor;
+            row.classList.toggle('rate-row--in-range', selected);
+            row.classList.toggle('rate-row--anchor', anchored);
+            row.setAttribute('aria-selected', anchored || selected ? 'true' : 'false');
+        });
+    });
+}
+
+function setEquipmentType(type, { resetLevels = false } = {}) {
+    if (type !== currentType) {
+        currentType = type;
+        tapAnchor = null;
+
+        typeBtns.forEach(b => {
+            const active = b.dataset.type === type;
+            b.classList.toggle('is-active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+    }
+
+    if (resetLevels) {
+        tapAnchor = null;
+        fromLv.value = 1;
+        toLv.value = maxLvFor(type);
+    }
+
+    fromLv.max = maxLvFor(type);
+    toLv.max = maxLvFor(type);
+}
+
+function applyLevels(from, to) {
+    fromLv.value = from;
+    toLv.value = to;
+    tapAnchor = null;
+    renderResults();
+}
+
+function handleTableRowTap(equipmentType, lv) {
+    if (equipmentType !== currentType) {
+        setEquipmentType(equipmentType);
+    }
+
+    if (tapAnchor === null) {
+        tapAnchor = lv;
+        fromLv.value = lv;
+        renderResults();
+        return;
+    }
+
+    let from = tapAnchor;
+    let to = lv;
+
+    if (to === from) {
+        if (from > 1) {
+            from -= 1;
+        } else {
+            to = Math.min(from + 1, maxLvFor(currentType));
+        }
+    } else if (to < from) {
+        [from, to] = [to, from];
+    }
+
+    applyLevels(from, to);
+}
+
+function renderRateTable({ title, meta, rows, showStarry, equipmentType }) {
     const oreHead = (key, label) => `
         <span class="rate-ore-head">
             <img src="${ORE_ICONS[key]}" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
@@ -196,7 +276,7 @@ function renderRateTable({ title, meta, rows, showStarry }) {
                 : '';
 
         return `
-        <tr class="${keyClass}">
+        <tr class="${keyClass}" data-lv="${r.lv}" tabindex="0" role="button" aria-label="เลเวล ${r.lv}">
             <td>${r.lv}</td>
             <td>${r.shiny ? fmt(r.shiny) : '—'}</td>
             <td>${r.glowy ? fmt(r.glowy) : '—'}</td>
@@ -205,7 +285,7 @@ function renderRateTable({ title, meta, rows, showStarry }) {
     }).join('');
 
     return `
-        <section class="rate-table-block" aria-label="${title} ${meta}">
+        <section class="rate-table-block" data-equipment-type="${equipmentType}" aria-label="${title} ${meta}">
             <div class="rate-table-head">
                 <h3>${title}</h3>
                 <span>${meta}</span>
@@ -242,14 +322,17 @@ function renderTables() {
             meta: '18 เลเวล',
             rows: COMMON,
             showStarry: false,
+            equipmentType: 'common',
         }),
         renderRateTable({
             title: 'อุปกรณ์อีปิค',
             meta: '27 เลเวล',
             rows: EPIC,
             showStarry: true,
+            equipmentType: 'epic',
         }),
     ].join('');
+    syncTableHighlight();
 }
 
 // ============ HANDLERS ============
@@ -257,24 +340,38 @@ typeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         const type = btn.dataset.type;
         if (type === currentType) return;
-        currentType = type;
-
-        typeBtns.forEach(b => {
-            const active = b.dataset.type === type;
-            b.classList.toggle('is-active', active);
-            b.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-
-        fromLv.value = 1;
-        toLv.value = maxLvFor(type);
+        setEquipmentType(type, { resetLevels: true });
         renderResults();
     });
 });
 
 [fromLv, toLv].forEach(el => {
     el.addEventListener('focus', () => el.select());
-    el.addEventListener('input', renderResults);
+    el.addEventListener('input', () => {
+        tapAnchor = null;
+        renderResults();
+    });
     el.addEventListener('blur', () => { clampInputs({ writeBack: true }); renderResults(); });
+});
+
+function onTableRowActivate(row) {
+    const block = row.closest('.rate-table-block');
+    if (!block) return;
+    handleTableRowTap(block.dataset.equipmentType, parseInt(row.dataset.lv, 10));
+}
+
+tablesEl.addEventListener('click', (e) => {
+    const row = e.target.closest('.rate-table tbody tr[data-lv]');
+    if (!row) return;
+    onTableRowActivate(row);
+});
+
+tablesEl.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const row = e.target.closest('.rate-table tbody tr[data-lv]');
+    if (!row) return;
+    e.preventDefault();
+    onTableRowActivate(row);
 });
 
 // initial
