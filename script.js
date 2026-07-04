@@ -345,6 +345,32 @@ typeBtns.forEach(btn => {
     });
 });
 
+document.querySelectorAll('.step-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const el = btn.dataset.target === 'fromLv' ? fromLv : toLv;
+        const max = maxLvFor(currentType);
+        let v = parseInt(el.value, 10);
+        if (!Number.isFinite(v)) v = 1;
+        el.value = Math.max(1, Math.min(max, v + parseInt(btn.dataset.step, 10)));
+        tapAnchor = null;
+        renderResults();
+    });
+});
+
+document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const max = maxLvFor(currentType);
+        const { from } = clampInputs();
+        if (btn.dataset.preset === 'all') {
+            applyLevels(1, max);
+        } else if (btn.dataset.preset === 'to-max') {
+            applyLevels(Math.min(from, max - 1), max);
+        } else {
+            applyLevels(Math.min(from, max - 1), Math.min(from + 1, max));
+        }
+    });
+});
+
 [fromLv, toLv].forEach(el => {
     el.addEventListener('focus', () => el.select());
     el.addEventListener('input', () => {
