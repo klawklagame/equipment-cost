@@ -56,21 +56,24 @@ const EPIC = [
 
 const GEM_PRICE = { shiny: 1, glowy: 5, starry: 35 };
 const ORE_ICONS = {
-    shiny: 'https://klawkla.com/content/images/2026/06/shiny-ore.webp',
-    glowy: 'https://klawkla.com/content/images/2026/06/glowy-ore.webp',
-    starry: 'https://klawkla.com/content/images/2026/06/starry-ore.webp',
+    shiny: 'images/shiny-ore.webp',
+    glowy: 'images/glowy-ore.webp',
+    starry: 'images/starry-ore.webp',
 };
+const TYPE_NAME = { common: 'คอมมอน', epic: 'อีปิค' };
 const COMMON_HIGHLIGHT_LEVELS = new Set([3, 6, 9, 12, 15, 18]);
 const EPIC_HIGHLIGHT_LEVELS = new Set([9, 12, 15, 18, 21, 24, 27]);
 
 const fmt = n => n.toLocaleString('en-US');
+const NBSP = ' ';
+const keep = word => `<span class="kk-keep">${word}</span>`;
 
 // ============ STATE ============
 let currentType = 'common';
 let tapAnchor = null;
 
 // ============ DOM ============
-const typeBtns  = document.querySelectorAll('.typebtn');
+const typeBtns  = document.querySelectorAll('.kk-seg-opt[data-type]');
 const fromLv    = document.getElementById('fromLv');
 const toLv      = document.getElementById('toLv');
 const resultsEl = document.getElementById('results');
@@ -117,55 +120,47 @@ function compute(from, to) {
     return { shiny, glowy, starry, gems };
 }
 
+/* Disable a stepper key when its level is already at the edge */
+function syncStepperKeys() {
+    const max = maxLvFor(currentType);
+    document.querySelectorAll('.kk-stepper-key[data-target]').forEach(btn => {
+        const el = btn.dataset.target === 'fromLv' ? fromLv : toLv;
+        const v = parseInt(el.value, 10);
+        const step = parseInt(btn.dataset.step, 10);
+        btn.disabled = Number.isFinite(v) && (step < 0 ? v <= 1 : v >= max);
+    });
+}
+
 function renderResults() {
     const { from, to } = clampInputs();
     const showStarry = currentType === 'epic';
-
-    resultsEl.classList.toggle('calc-results--common', !showStarry);
-    resultsEl.classList.toggle('calc-results--epic', showStarry);
+    syncStepperKeys();
 
     if (to <= from) {
         resultsEl.innerHTML = `
-            <div class="calc-warning">
-                ✦ เลเวลเป้าหมายต้องมากกว่าเลเวลปัจจุบัน
+            <div class="kk-empty">
+                <p class="kk-empty-hint">เลเวลเป้าหมายต้องมากกว่าเลเวลปัจจุบัน</p>
             </div>`;
         syncTableHighlight();
         return;
     }
 
     const c = compute(from, to);
-    const oreLabel = (key, label) => `
-        <span class="result-label result-label--ore">
-            <img class="result-ore-icon" src="${ORE_ICONS[key]}" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
-            ${label}
-        </span>`;
-
-    const starryChip = showStarry ? `
-        <div class="result-chip result-chip--starry">
-            ${oreLabel('starry', 'แร่ประกายดาว')}
-            <span class="result-value">${fmt(c.starry)}</span>
-            <span class="result-sub">= ${fmt(c.starry * GEM_PRICE.starry)} 💎</span>
-        </div>` : '';
+    const oreTile = (key, label) => `
+        <div class="kk-stat kk-stat--${key}">
+            <span class="kk-stat-label"><img src="${ORE_ICONS[key]}" alt="" width="24" height="24" decoding="async">${label}</span>
+            <span class="kk-stat-value">${fmt(c[key])}</span>
+            <span class="kk-stat-sub">=${NBSP}${fmt(c[key] * GEM_PRICE[key])}${NBSP}เพชร</span>
+        </div>`;
 
     resultsEl.innerHTML = `
-        <div class="result-chip result-chip--shiny">
-            ${oreLabel('shiny', 'แร่วิบวับ')}
-            <span class="result-value">${fmt(c.shiny)}</span>
-            <span class="result-sub">= ${fmt(c.shiny * GEM_PRICE.shiny)} 💎</span>
-        </div>
-        <div class="result-chip result-chip--glowy">
-            ${oreLabel('glowy', 'แร่เรืองรอง')}
-            <span class="result-value">${fmt(c.glowy)}</span>
-            <span class="result-sub">= ${fmt(c.glowy * GEM_PRICE.glowy)} 💎</span>
-        </div>
-        ${starryChip}
-        <div class="result-chip result-chip--total">
-            <span class="result-label result-label--gem">
-                <span class="result-gem-icon" aria-hidden="true">💎</span>
-                จ่ายด้วยเพชร
-            </span>
-            <span class="result-value">${fmt(c.gems)}</span>
-            <span class="result-sub">${from} → ${to}</span>
+        ${oreTile('shiny', 'แร่วิบวับ')}
+        ${oreTile('glowy', 'แร่เรืองรอง')}
+        ${showStarry ? oreTile('starry', 'แร่ประกายดาว') : ''}
+        <div class="kk-stat kk-stat--total kk-stat--wide">
+            <span class="kk-stat-label"><svg class="kk-icon" aria-hidden="true"><use href="#kk-gem"/></svg>จ่ายด้วยเพชร</span>
+            <span class="kk-stat-value">${fmt(c.gems)}</span>
+            <span class="kk-stat-sub">${keep(TYPE_NAME[currentType])} เลเวล ${from} → ${to}</span>
         </div>
     `;
     syncTableHighlight();
@@ -175,18 +170,16 @@ function syncTableHighlight() {
     const { from, to } = clampInputs();
     const inRange = to > from;
 
-    tablesEl.querySelectorAll('.rate-table-block').forEach(block => {
+    tablesEl.querySelectorAll('.ec-table-block').forEach(block => {
         const active = block.dataset.equipmentType === currentType;
-        block.classList.toggle('rate-table-block--active', active && (inRange || tapAnchor !== null));
-        block.classList.toggle('rate-table-block--muted', !active);
+        block.querySelector('.ec-active-tag').hidden = !active;
 
-        block.querySelectorAll('.rate-table tbody tr[data-lv]').forEach(row => {
+        block.querySelectorAll('.kk-table tbody tr[data-lv]').forEach(row => {
             const lv = parseInt(row.dataset.lv, 10);
-            const selected = active && inRange && lv > from && lv <= to;
             const anchored = active && tapAnchor !== null && lv === tapAnchor;
-            row.classList.toggle('rate-row--in-range', selected);
-            row.classList.toggle('rate-row--anchor', anchored);
-            row.setAttribute('aria-selected', anchored || selected ? 'true' : 'false');
+            const selected = active && inRange && lv > from && lv <= to && !anchored;
+            row.classList.toggle('is-range', selected);
+            row.classList.toggle('is-anchor', anchored);
         });
     });
 }
@@ -197,9 +190,7 @@ function setEquipmentType(type, { resetLevels = false } = {}) {
         tapAnchor = null;
 
         typeBtns.forEach(b => {
-            const active = b.dataset.type === type;
-            b.classList.toggle('is-active', active);
-            b.setAttribute('aria-selected', active ? 'true' : 'false');
+            b.setAttribute('aria-selected', b.dataset.type === type ? 'true' : 'false');
         });
     }
 
@@ -248,12 +239,15 @@ function handleTableRowTap(equipmentType, lv) {
     applyLevels(from, to);
 }
 
-function renderRateTable({ title, meta, rows, showStarry, equipmentType }) {
+function renderRateTable({ name, meta, rows, showStarry, equipmentType }) {
+    const title = `อุปกรณ์${keep(name)}`;
+    const label = `อุปกรณ์${name} ${meta}`;
     const oreHead = (key, label) => `
-        <span class="rate-ore-head">
-            <img src="${ORE_ICONS[key]}" alt="" width="24" height="24" loading="lazy" decoding="async" aria-hidden="true">
+        <span class="kk-th-icon">
+            <img src="${ORE_ICONS[key]}" alt="" width="22" height="22" loading="lazy" decoding="async">
             ${label}
         </span>`;
+    const cell = n => n ? `<td>${fmt(n)}</td>` : `<td class="is-zero">–</td>`;
 
     const totals = rows.reduce((sum, r) => ({
         shiny: sum.shiny + r.shiny,
@@ -261,56 +255,49 @@ function renderRateTable({ title, meta, rows, showStarry, equipmentType }) {
         starry: sum.starry + r.starry,
     }), { shiny: 0, glowy: 0, starry: 0 });
 
-    const starryHead = showStarry
-        ? `<th scope="col">${oreHead('starry', 'ประกายดาว')}</th>`
-        : '';
-    const starryTotal = showStarry
-        ? `<td>${fmt(totals.starry)}</td>`
-        : '';
+    const keyLevels = showStarry ? EPIC_HIGHLIGHT_LEVELS : COMMON_HIGHLIGHT_LEVELS;
+    const keyLegend = showStarry ? 'เลเวลที่ใช้แร่ประกายดาว' : 'เลเวลที่ใช้แร่เรืองรอง';
 
-    const body = rows.map(r => {
-        const keyClass = !showStarry && COMMON_HIGHLIGHT_LEVELS.has(r.lv)
-            ? 'rate-row--common-key'
-            : showStarry && EPIC_HIGHLIGHT_LEVELS.has(r.lv)
-                ? 'rate-row--epic-key'
-                : '';
-
-        return `
-        <tr class="${keyClass}" data-lv="${r.lv}" tabindex="0" role="button" aria-label="เลเวล ${r.lv}">
-            <td>${r.lv}</td>
-            <td>${r.shiny ? fmt(r.shiny) : '—'}</td>
-            <td>${r.glowy ? fmt(r.glowy) : '—'}</td>
-            ${showStarry ? `<td>${r.starry ? fmt(r.starry) : '—'}</td>` : ''}
-        </tr>`;
-    }).join('');
+    const body = rows.map(r => `
+        <tr${keyLevels.has(r.lv) ? ' class="is-key"' : ''} data-lv="${r.lv}" tabindex="0" role="button" aria-label="เลเวล ${r.lv}">
+            <td><span class="kk-lv">${r.lv}</span></td>
+            ${cell(r.shiny)}
+            ${cell(r.glowy)}
+            ${showStarry ? cell(r.starry) : ''}
+        </tr>`).join('');
 
     return `
-        <section class="rate-table-block" data-equipment-type="${equipmentType}" aria-label="${title} ${meta}">
-            <div class="rate-table-head">
-                <h3>${title}</h3>
-                <span>${meta}</span>
+        <section class="ec-table-block" data-equipment-type="${equipmentType}" aria-label="${label}">
+            <div class="ec-table-head">
+                <h3 class="ec-table-title">${title}</h3>
+                <span class="ec-table-meta">${meta}</span>
+                <span class="kk-tag kk-tag--elixir ec-active-tag" hidden>กำลังคำนวณ</span>
             </div>
-            <div class="table-wrap" tabindex="0" aria-label="${title} ${meta}">
-                <table class="rate-table">
+            <div class="kk-table-wrap" tabindex="0" aria-label="${label}">
+                <table class="kk-table">
                     <thead>
                         <tr>
                             <th scope="col">เลเวล</th>
                             <th scope="col">${oreHead('shiny', 'วิบวับ')}</th>
                             <th scope="col">${oreHead('glowy', 'เรืองรอง')}</th>
-                            ${starryHead}
+                            ${showStarry ? `<th scope="col">${oreHead('starry', 'ประกายดาว')}</th>` : ''}
                         </tr>
                     </thead>
                     <tbody>${body}</tbody>
                     <tfoot>
                         <tr>
-                            <th scope="row">รวม</th>
+                            <th scope="row">รวม 1 → ${rows.length}</th>
                             <td>${fmt(totals.shiny)}</td>
                             <td>${fmt(totals.glowy)}</td>
-                            ${starryTotal}
+                            ${showStarry ? `<td>${fmt(totals.starry)}</td>` : ''}
                         </tr>
                     </tfoot>
                 </table>
             </div>
+            <p class="kk-table-note">
+                <span><i class="kk-swatch"></i>${keyLegend}</span>
+                <span><i class="kk-swatch kk-swatch--range"></i>ช่วงที่คำนวณ</span>
+            </p>
         </section>
     `;
 }
@@ -318,14 +305,14 @@ function renderRateTable({ title, meta, rows, showStarry, equipmentType }) {
 function renderTables() {
     tablesEl.innerHTML = [
         renderRateTable({
-            title: 'อุปกรณ์คอมมอน',
+            name: 'คอมมอน',
             meta: '18 เลเวล',
             rows: COMMON,
             showStarry: false,
             equipmentType: 'common',
         }),
         renderRateTable({
-            title: 'อุปกรณ์อีปิค',
+            name: 'อีปิค',
             meta: '27 เลเวล',
             rows: EPIC,
             showStarry: true,
@@ -345,7 +332,7 @@ typeBtns.forEach(btn => {
     });
 });
 
-document.querySelectorAll('.step-btn').forEach(btn => {
+document.querySelectorAll('.kk-stepper-key[data-target]').forEach(btn => {
     btn.addEventListener('click', () => {
         const el = btn.dataset.target === 'fromLv' ? fromLv : toLv;
         const max = maxLvFor(currentType);
@@ -357,7 +344,7 @@ document.querySelectorAll('.step-btn').forEach(btn => {
     });
 });
 
-document.querySelectorAll('.preset-btn').forEach(btn => {
+document.querySelectorAll('.kk-chip[data-preset]').forEach(btn => {
     btn.addEventListener('click', () => {
         const max = maxLvFor(currentType);
         const { from } = clampInputs();
@@ -381,20 +368,20 @@ document.querySelectorAll('.preset-btn').forEach(btn => {
 });
 
 function onTableRowActivate(row) {
-    const block = row.closest('.rate-table-block');
+    const block = row.closest('.ec-table-block');
     if (!block) return;
     handleTableRowTap(block.dataset.equipmentType, parseInt(row.dataset.lv, 10));
 }
 
 tablesEl.addEventListener('click', (e) => {
-    const row = e.target.closest('.rate-table tbody tr[data-lv]');
+    const row = e.target.closest('.kk-table tbody tr[data-lv]');
     if (!row) return;
     onTableRowActivate(row);
 });
 
 tablesEl.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    const row = e.target.closest('.rate-table tbody tr[data-lv]');
+    const row = e.target.closest('.kk-table tbody tr[data-lv]');
     if (!row) return;
     e.preventDefault();
     onTableRowActivate(row);

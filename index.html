@@ -4,156 +4,133 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="คำนวณค่าอัปเกรดอุปกรณ์ผู้กล้าใน Clash of Clans แร่วิบวับ แร่เรืองรอง แร่ประกายดาว พร้อมค่า 💎" />
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="description" content="คำนวณค่าอัปเกรดอุปกรณ์ผู้กล้าใน Clash of Clans แร่วิบวับ แร่เรืองรอง แร่ประกายดาว พร้อมราคาเทียบเพชร" />
+    <meta name="theme-color" content="#0f0b11">
     <meta name="color-scheme" content="dark">
-    <title>ค่าอัปเกรดอุปกรณ์ผู้กล้า • KLAWKLA</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://klawkla.com" crossorigin>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="style.css?v=ux-2">
+    <title>ค่าอัปเกรดอุปกรณ์ผู้กล้า · KLAWKLA</title>
+    <link rel="preload" href="fonts/FCKrungThep-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/FCMahaNakhonFlat-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="kk/tokens.css?v=1">
+    <link rel="stylesheet" href="kk/kk.css?v=1">
+    <link rel="stylesheet" href="style.css?v=kk-1">
 </head>
 
 <body>
-    <div class="wrap">
+    <svg class="kk-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="kk-gem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20"/><path d="M9.5 3 8 9l4 12 4-12-1.5-6"/></symbol>
+        <symbol id="kk-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></symbol>
+        <symbol id="kk-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+        <symbol id="kk-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></symbol>
+        <symbol id="kk-tip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.2h5c0-.9.4-1.7 1.1-2.2A6 6 0 0 0 12 3z"/></symbol>
+    </svg>
 
-        <header class="hero reveal" style="--i:0;">
-            <div class="container">
-                <div class="hero-top">
-                    <a class="hero-brand" href="https://www.klawkla.com/">
-                        <img src="https://klawkla.com/content/images/2025/08/logo.webp" alt="แกล้วกล้า"
-                            width="36" height="36" fetchpriority="high" decoding="async" />
-                        <span>KLAWKLA</span>
-                    </a>
-                    <span class="hero-tag">เครื่องมือชาวแคลช</span>
+    <header class="kk-topbar">
+        <a class="kk-brand" href="https://www.klawkla.com/">
+            <img class="kk-brand-mark" src="images/logo.webp" alt="แกล้วกล้า" width="32" height="32">
+            <span class="kk-brand-name">KLAWKLA</span>
+        </a>
+        <p class="kk-topbar-title">ค่าอัปเกรดอุปกรณ์ผู้กล้า</p>
+    </header>
+
+    <main class="kk-page">
+        <div class="kk-pagehead">
+            <p class="kk-eyebrow">อุปกรณ์ผู้กล้า</p>
+            <h1 class="kk-pagehead-title">ค่าอัปเกรดอุปกรณ์ผู้กล้า</h1>
+            <p class="kk-pagehead-sub">คำนวณแร่ที่ต้องใช้อัปเกรดอุปกรณ์ ทั้ง<span class="kk-keep">คอมมอน</span>และ<span class="kk-keep">อีปิค</span> พร้อมราคาเทียบเพชร</p>
+            <div class="kk-pagehead-meta">
+                <span class="kk-tag kk-tag--outline"><span class="kk-keep">คอมมอน</span>&nbsp;L1–18</span>
+                <span class="kk-tag kk-tag--outline"><span class="kk-keep">อีปิค</span>&nbsp;L1–27</span>
+            </div>
+        </div>
+
+        <section class="kk-card" aria-labelledby="calc-title">
+            <header class="kk-card-head">
+                <p class="kk-eyebrow">เครื่องมือคำนวณ</p>
+                <h2 class="kk-card-title" id="calc-title">คำนวณแร่ที่ต้องใช้</h2>
+            </header>
+
+            <div class="kk-seg" role="tablist" aria-label="ประเภทอุปกรณ์">
+                <button class="kk-seg-opt" type="button" role="tab" data-type="common" aria-selected="true">คอมมอน <span class="kk-seg-sub">L1–18</span></button>
+                <button class="kk-seg-opt" type="button" role="tab" data-type="epic" aria-selected="false">อีปิค <span class="kk-seg-sub">L1–27</span></button>
+            </div>
+
+            <div class="kk-range">
+                <div class="kk-field">
+                    <label class="kk-label" for="fromLv">เลเวลปัจจุบัน</label>
+                    <div class="kk-stepper">
+                        <button class="kk-stepper-key" type="button" data-target="fromLv" data-step="-1" aria-label="ลดเลเวลปัจจุบัน"><svg class="kk-icon" aria-hidden="true"><use href="#kk-minus"/></svg></button>
+                        <input class="kk-stepper-input" id="fromLv" type="number" value="1" inputmode="numeric" />
+                        <button class="kk-stepper-key" type="button" data-target="fromLv" data-step="1" aria-label="เพิ่มเลเวลปัจจุบัน"><svg class="kk-icon" aria-hidden="true"><use href="#kk-plus"/></svg></button>
+                    </div>
                 </div>
-
-                <h1 class="hero-title">
-                    ค่าอัปเกรดอุปกรณ์ผู้กล้า
-                </h1>
-
-                <p class="hero-sub">
-                    คำนวณแร่ที่ต้องใช้อัปเกรดอุปกรณ์ ทั้งคอมมอนและอีปิค พร้อมราคาเทียบ 💎
-                </p>
-            </div>
-        </header>
-
-        <section class="ores reveal" style="--i:1;" aria-label="ประเภทแร่">
-            <div class="container">
-                <article class="card">
-                    <span class="eyebrow">แร่ทั้งสามชนิด</span>
-                    <h2 class="h-title">ใช้แร่อะไรอัปเกรดบ้าง</h2>
-
-                    <div class="ore-list">
-                        <div class="ore-item ore-item--shiny">
-                            <span class="ore-icon">
-                                <img src="https://klawkla.com/content/images/2026/06/shiny-ore.webp" alt="แร่วิบวับ" width="32" height="32" loading="lazy" decoding="async">
-                            </span>
-                            <div class="ore-meta">
-                                <h3 class="ore-name">แร่วิบวับ</h3>
-                                <p class="ore-desc">ใช้อัปเกรดอุปกรณ์คอมมอนและอีปิคทุกเลเวล</p>
-                            </div>
-                            <span class="ore-price">1 💎</span>
-                        </div>
-
-                        <div class="ore-item ore-item--glowy">
-                            <span class="ore-icon">
-                                <img src="https://klawkla.com/content/images/2026/06/glowy-ore.webp" alt="แร่เรืองรอง" width="32" height="32" loading="lazy" decoding="async">
-                            </span>
-                            <div class="ore-meta">
-                                <h3 class="ore-name">แร่เรืองรอง</h3>
-                                <p class="ore-desc">ใช้อัปเกรดเลเวล 3, 6, 9, 12, 15, 18, 21, 24, 27</p>
-                            </div>
-                            <span class="ore-price">5 💎</span>
-                        </div>
-
-                        <div class="ore-item ore-item--starry">
-                            <span class="ore-icon">
-                                <img src="https://klawkla.com/content/images/2026/06/starry-ore.webp" alt="แร่ประกายดาว" width="32" height="32" loading="lazy" decoding="async">
-                            </span>
-                            <div class="ore-meta">
-                                <h3 class="ore-name">แร่ประกายดาว</h3>
-                                <p class="ore-desc">ใช้อัปเกรดอุปกรณ์อีปิคเลเวล 9, 12, 15, 18, 21, 24, 27</p>
-                            </div>
-                            <span class="ore-price">35 💎</span>
-                        </div>
+                <span class="kk-range-arrow" aria-hidden="true"><svg class="kk-icon"><use href="#kk-arrow-right"/></svg></span>
+                <div class="kk-field">
+                    <label class="kk-label" for="toLv">อัปเกรดถึงเลเวล</label>
+                    <div class="kk-stepper">
+                        <button class="kk-stepper-key" type="button" data-target="toLv" data-step="-1" aria-label="ลดเลเวลเป้าหมาย"><svg class="kk-icon" aria-hidden="true"><use href="#kk-minus"/></svg></button>
+                        <input class="kk-stepper-input" id="toLv" type="number" value="18" inputmode="numeric" />
+                        <button class="kk-stepper-key" type="button" data-target="toLv" data-step="1" aria-label="เพิ่มเลเวลเป้าหมาย"><svg class="kk-icon" aria-hidden="true"><use href="#kk-plus"/></svg></button>
                     </div>
-                </article>
+                </div>
+            </div>
+
+            <div class="kk-chips" aria-label="ช่วงเลเวลด่วน">
+                <button class="kk-chip" type="button" data-preset="all">1 → สูงสุด</button>
+                <button class="kk-chip" type="button" data-preset="to-max">เลเวลนี้ → สูงสุด</button>
+                <button class="kk-chip" type="button" data-preset="next">อีก 1 เลเวล</button>
+            </div>
+
+            <div class="kk-stats" id="results" aria-live="polite"></div>
+        </section>
+
+        <section class="kk-card" aria-labelledby="ores-title">
+            <header class="kk-card-head">
+                <p class="kk-eyebrow">แร่ทั้งสามชนิด</p>
+                <h2 class="kk-card-title" id="ores-title">ใช้แร่อะไรอัปเกรดบ้าง</h2>
+            </header>
+            <div class="kk-rows">
+                <div class="kk-row">
+                    <span class="kk-row-icon" style="--hue: var(--ore-shiny)"><img src="images/shiny-ore.webp" alt="" width="40" height="40"></span>
+                    <div class="kk-row-body">
+                        <h3 class="kk-row-title">แร่วิบวับ</h3>
+                        <p class="kk-row-meta">ใช้อัปเกรดอุปกรณ์<span class="kk-keep">คอมมอน</span>และ<span class="kk-keep">อีปิค</span>ทุกเลเวล</p>
+                    </div>
+                    <div class="kk-row-end"><span class="kk-amount kk-amount--gem kk-amount--pill">1<span class="kk-sr"> เพชร</span><svg class="kk-amount-icon" aria-hidden="true"><use href="#kk-gem"/></svg></span></div>
+                </div>
+                <div class="kk-row">
+                    <span class="kk-row-icon" style="--hue: var(--ore-glowy)"><img src="images/glowy-ore.webp" alt="" width="40" height="40"></span>
+                    <div class="kk-row-body">
+                        <h3 class="kk-row-title">แร่เรืองรอง</h3>
+                        <p class="kk-row-meta">ใช้อัปเกรดเลเวล 3, 6, 9, 12, 15, 18, 21, 24, 27</p>
+                    </div>
+                    <div class="kk-row-end"><span class="kk-amount kk-amount--gem kk-amount--pill">5<span class="kk-sr"> เพชร</span><svg class="kk-amount-icon" aria-hidden="true"><use href="#kk-gem"/></svg></span></div>
+                </div>
+                <div class="kk-row">
+                    <span class="kk-row-icon" style="--hue: var(--ore-starry)"><img src="images/starry-ore.webp" alt="" width="40" height="40"></span>
+                    <div class="kk-row-body">
+                        <h3 class="kk-row-title">แร่ประกายดาว</h3>
+                        <p class="kk-row-meta">ใช้อัปเกรดอุปกรณ์<span class="kk-keep">อีปิค</span>เลเวล 9, 12, 15, 18, 21, 24, 27</p>
+                    </div>
+                    <div class="kk-row-end"><span class="kk-amount kk-amount--gem kk-amount--pill">35<span class="kk-sr"> เพชร</span><svg class="kk-amount-icon" aria-hidden="true"><use href="#kk-gem"/></svg></span></div>
+                </div>
             </div>
         </section>
 
-        <section class="calc reveal" style="--i:2;" aria-label="เครื่องคำนวณ">
-            <div class="container">
-                <article class="card">
-                    <span class="eyebrow">เครื่องมือคำนวณ</span>
-                    <h2 class="h-title">คำนวณแร่ที่ต้องใช้</h2>
-
-                    <div class="typebar" role="tablist" aria-label="ประเภทอุปกรณ์">
-                        <button class="typebtn is-active" type="button" data-type="common" role="tab" aria-selected="true">
-                            <span>คอมมอน</span>
-                            <span class="typebtn-sub">L1–18</span>
-                        </button>
-                        <button class="typebtn" type="button" data-type="epic" role="tab" aria-selected="false">
-                            <span>อีปิค</span>
-                            <span class="typebtn-sub">L1–27</span>
-                        </button>
-                    </div>
-
-                    <div class="calc-inputs">
-                        <div class="calc-field">
-                            <label class="calc-label" for="fromLv">เลเวลปัจจุบัน</label>
-                            <div class="stepper">
-                                <button class="step-btn" type="button" data-target="fromLv" data-step="-1" aria-label="ลดเลเวลปัจจุบัน">−</button>
-                                <input id="fromLv" type="number" value="1" inputmode="numeric" />
-                                <button class="step-btn" type="button" data-target="fromLv" data-step="1" aria-label="เพิ่มเลเวลปัจจุบัน">+</button>
-                            </div>
-                        </div>
-                        <span class="calc-arrow" aria-hidden="true">→</span>
-                        <div class="calc-field">
-                            <label class="calc-label" for="toLv">อัปเกรดถึงเลเวล</label>
-                            <div class="stepper">
-                                <button class="step-btn" type="button" data-target="toLv" data-step="-1" aria-label="ลดเลเวลเป้าหมาย">−</button>
-                                <input id="toLv" type="number" value="18" inputmode="numeric" />
-                                <button class="step-btn" type="button" data-target="toLv" data-step="1" aria-label="เพิ่มเลเวลเป้าหมาย">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="calc-presets" aria-label="ช่วงเลเวลด่วน">
-                        <button class="preset-btn" type="button" data-preset="all">1 → สูงสุด</button>
-                        <button class="preset-btn" type="button" data-preset="to-max">เลเวลนี้ → สูงสุด</button>
-                        <button class="preset-btn" type="button" data-preset="next">อีก 1 เลเวล</button>
-                    </div>
-
-                    <div class="calc-results" id="results" role="status" aria-live="polite"></div>
-                </article>
-            </div>
+        <section class="kk-card" aria-labelledby="table-title">
+            <header class="kk-card-head">
+                <p class="kk-eyebrow">ตารางค่าอัปเกรด</p>
+                <h2 class="kk-card-title" id="table-title">อัตราการใช้แร่แต่ละเลเวล</h2>
+                <p class="kk-card-hint"><svg class="kk-icon" aria-hidden="true"><use href="#kk-tip"/></svg>แตะเลเวลเริ่มต้น แล้วแตะเลเวลเป้าหมายในตาราง เพื่อเลือกช่วงคำนวณได้เลย</p>
+            </header>
+            <div class="ec-tables" id="rateTables"></div>
         </section>
+    </main>
 
-        <section class="table-sec reveal" style="--i:3;" aria-label="ตารางค่าอัปเกรดแต่ละเลเวล">
-            <div class="container">
-                <article class="card">
-                    <span class="eyebrow">ตารางค่าอัปเกรด</span>
-                    <h2 class="h-title">อัตราการใช้แร่แต่ละเลเวล</h2>
-                    <p class="hint">💡 แตะเลเวลเริ่มต้น แล้วแตะเลเวลเป้าหมายในตาราง เพื่อเลือกช่วงคำนวณได้เลย</p>
-                    <div class="rate-tables" id="rateTables"></div>
-                </article>
-            </div>
-        </section>
+    <footer class="kk-footer">
+        <p>สร้างโดยผู้เล่นแคลชเพื่อผู้เล่นแคลช · <a href="https://www.klawkla.com" target="_blank" rel="noopener noreferrer">klawkla.com</a></p>
+    </footer>
 
-        <footer class="foot reveal" style="--i:4;">
-            <div class="container">
-                <p class="credit">
-                    สร้างโดยผู้เล่นแคลชเพื่อผู้เล่นแคลช ·
-                    <a href="https://www.klawkla.com" target="_blank" rel="noopener noreferrer">klawkla.com</a>
-                </p>
-            </div>
-        </footer>
-    </div>
-
-    <script src="script.js" defer></script>
+    <script src="script.js?v=kk-1" defer></script>
 </body>
 
 </html>
